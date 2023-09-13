@@ -1,0 +1,426 @@
+/* eslint-disable react-native/no-inline-styles */
+import { MaterialIcons } from "@expo/vector-icons";
+import { CheckBox, Icon, makeStyles, Text, useTheme } from "@rneui/themed";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useState } from "react";
+import { SafeAreaView, ScrollView, TouchableOpacity, View } from "react-native";
+
+import CustomBottomDrawer from "/src/lib/customBottomDrawer";
+
+import BondFund from "../../assets/bond-fund.svg";
+import Cancel from "../../assets/cancel.svg";
+import CheckCircle from "../../assets/check-circle.svg";
+import Clock from "../../assets/clock.svg";
+import Isip from "../../assets/isip.svg";
+import Nifty from "../../assets/nifty.svg";
+import Pending from "../../assets/pending.svg";
+import Redeem from "../../assets/redeem.svg";
+import Savings from "../../assets/savings.svg";
+import Stp from "../../assets/stp.svg";
+import Switch from "../../assets/switch.svg";
+import Swp from "../../assets/swp.svg";
+import useBaseStyles from "../baseStyles";
+
+const TransactionHistory = () => {
+    const { theme } = useTheme();
+    const styles = useStyles();
+    const baseStyles = useBaseStyles();
+    const labelStyle = {
+        color: theme.appColors.primaryBlue,
+        fontSize: theme.fontSize.small,
+    };
+    const [isStatusDrawerVisible, setStatusDrawerVisible] = useState(false);
+    const [isDateRangeDrawerVisible, setDateRangeDrawerVisible] = useState(false);
+    const [selectedStatusOptions] = useState([]);
+    const [selectedDateRangeOptions] = useState([]);
+    const [selectedStatus, setSelectedStatus] = useState("");
+    const [selectedDateRange, setSelectedDateRange] = useState("");
+
+    const toggleStatusDrawer = () => {
+        setStatusDrawerVisible(!isStatusDrawerVisible);
+        setDateRangeDrawerVisible(false);
+    };
+
+    const toggleDateRangeDrawer = () => {
+        setDateRangeDrawerVisible(!isDateRangeDrawerVisible);
+        setStatusDrawerVisible(false);
+    };
+
+    const statusDropdownData = [
+        { label: "All", value: "All" },
+        { label: "Pending", value: "Pending" },
+        { label: "Processed", value: "Processed" },
+        { label: "Rejected", value: "Rejected" },
+    ];
+    const dateRangeDropdownData = [
+        { label: "Last 7 Days", value: "7days" },
+        { label: "30 Days", value: "30days" },
+        { label: "60 Days", value: "60days" },
+        { label: "90 Days", value: "90days" },
+    ];
+
+    const transactionEntries = [
+        {
+            icon: <Nifty />,
+            title: "Mirae Asset Nifty India Manufacturing ETF Fund of Fund",
+            money: "₹ 5,000",
+            status: <CheckCircle />,
+            timestamp: "10:23am, 16 June 2023",
+        },
+        {
+            icon: <Swp />,
+            title: "Mirae Asset Equity Savings Fund",
+            money: "₹ 25,200",
+            status: <Pending />,
+            timestamp: "10:23am, 16 June 2023",
+        },
+        {
+            icon: <Savings />,
+            title: "Mirae Asset Hang Sang Tech ETF Fund of Fund",
+            money: "₹ 1,00,000",
+            status: <CheckCircle />,
+            timestamp: "10:23am, 16 June 2023",
+        },
+        {
+            icon: (
+                <View>
+                    <BondFund />
+                    <Clock style={styles.clockIcon} />
+                </View>
+            ),
+            title: "Mirae Asset Hang Sang Tech ETF Fund of Fund",
+            money: "₹ 1,00,000",
+            status: <Cancel />,
+            timestamp: "10:23am, 16 June 2023",
+        },
+        {
+            icon: <Redeem />,
+            title: " Mirae Asset Hang Sang Tech ETF Fund of Fund",
+            money: "₹ 1,00,000",
+            status: <Cancel />,
+            timestamp: "10:23am, 16 April 2023",
+        },
+        {
+            icon: <Nifty />,
+            title: "Mirae Asset Equity Savings Fund",
+            money: "₹ 25,200",
+            status: <CheckCircle />,
+            timestamp: "10:23am, 16 April 2023",
+        },
+        {
+            icon: <Isip />,
+            title: "Mirae Asset Hang Sang Tech ETF Fund of Fund",
+            money: "₹ 1,00,000",
+            status: <Cancel />,
+            timestamp: "10:23am, 16 April 2023",
+        },
+        {
+            icon: <Switch />,
+            title: "Mirae Asset Nifty India Manufacturing ETF Fund of Fund",
+            money: "₹ 1,200",
+            status: <CheckCircle />,
+            timestamp: "10:23am, 16 April 2023",
+        },
+        {
+            icon: <Stp />,
+            title: " Mirae Asset Hang Sang Tech ETF Fund of Fund",
+            money: "₹ 1,00,000",
+            status: <CheckCircle />,
+            timestamp: "10:23am, 16 April 2023",
+        },
+    ];
+
+    const renderTransactionItem = (entry, index) => (
+        <TouchableOpacity key={index}>
+            <View style={styles.notificationContainer}>
+                <View style={styles.iconContent}>{entry.icon}</View>
+                <View style={styles.columnContent}>
+                    <Text style={styles.title}>{entry.title}</Text>
+                    <View style={styles.rowContent}>
+                        {entry.status}
+                        <Text style={styles.timestampText}>{entry.timestamp}</Text>
+                    </View>
+                </View>
+                <View style={styles.moneyAndIconContainer}>
+                    <Text style={styles.moneyText}>{entry.money}</Text>
+                    <Icon
+                        name="chevron-thin-right"
+                        color="#48535B"
+                        type="entypo"
+                        size={10}
+                    />
+                </View>
+            </View>
+        </TouchableOpacity>
+    );
+    const renderDropdownOptions = (
+        options,
+        selectedValue,
+        setSelectedValue,
+        selectedOptions,
+    ) => (
+        <>
+            <Text style={[styles.dropdownTitle, { paddingLeft: 22, paddingBottom: 10 }]}>
+                Status
+            </Text>
+            {options.map((option, index) => (
+                <TouchableOpacity
+                    key={option.value}
+                    onPress={() => {
+                        const updatedOptions = [...selectedOptions];
+                        if (selectedOptions.includes(option.value)) {
+                            updatedOptions.splice(
+                                updatedOptions.indexOf(option.value),
+                                1,
+                            );
+                        } else {
+                            updatedOptions.push(option.value);
+                        }
+                        setSelectedValue(option.value);
+                    }}
+                >
+                    <View
+                        style={[
+                            styles.checkboxAndText,
+                            {
+                                borderBottomWidth: index === options.length - 1 ? 0 : 1,
+                                borderColor: theme.appColors.borderGrey,
+                            },
+                        ]}
+                    >
+                        <Text style={[labelStyle, baseStyles.fw500]}>{option.label}</Text>
+                        <CheckBox
+                            checked={selectedValue === option.value}
+                            iconType="ionicon"
+                            checkedIcon="checkbox"
+                            uncheckedIcon={
+                                <Icon
+                                    name="square-outline"
+                                    type="ionicon"
+                                    color="black"
+                                />
+                            }
+                            onPress={() => setSelectedValue(option.value)}
+                        />
+                    </View>
+                </TouchableOpacity>
+            ))}
+        </>
+    );
+
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            <ScrollView>
+                <View style={styles.container}>
+                    <View style={[styles.folioNumber]}>
+                        <Text
+                            style={[
+                                baseStyles.setColorTextGrey,
+                                baseStyles.fontSmall,
+                                baseStyles.fw500,
+                            ]}
+                        >
+                            Folio Number :{"  "}
+                            <Text
+                                style={[
+                                    baseStyles.setColorPrimaryBlue,
+                                    baseStyles.fw700,
+                                    baseStyles.fontSmall,
+                                ]}
+                            >
+                                79891893811
+                            </Text>
+                        </Text>
+                        <View style={{ marginLeft: "auto" }}>
+                            <TouchableOpacity>
+                                <Text style={styles.changeText}>Change</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={styles.selectContainer}>
+                        <LinearGradient
+                            colors={["#ECEFF4", "#ECF3F400"]}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 0, y: 1 }}
+                            style={styles.transactGradient}
+                        />
+                        <View style={styles.textContent}>
+                            <TouchableOpacity
+                                onPress={toggleStatusDrawer}
+                                style={{ flexDirection: "row", alignItems: "center" }}
+                            >
+                                <Text style={styles.dropdownPlaceholder}>Status</Text>
+                                <MaterialIcons
+                                    name="arrow-drop-down"
+                                    size={12}
+                                    color={theme.appColors.orangeBrown}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.textContent}>
+                            <TouchableOpacity
+                                onPress={toggleDateRangeDrawer}
+                                style={{ flexDirection: "row", alignItems: "center" }}
+                            >
+                                <Text style={styles.dropdownPlaceholder}>Date Range</Text>
+                                <MaterialIcons
+                                    name="arrow-drop-down"
+                                    size={12}
+                                    color={theme.appColors.orangeBrown}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={styles.monthContainer}>
+                        <Text style={styles.monthText}> June </Text>
+                        {transactionEntries.slice(0, 4).map(renderTransactionItem)}
+                        <Text style={styles.monthText}> April </Text>
+                        {transactionEntries.slice(4).map(renderTransactionItem)}
+                    </View>
+                </View>
+            </ScrollView>
+            <CustomBottomDrawer
+                isVisible={isStatusDrawerVisible}
+                onBackdropPress={toggleStatusDrawer}
+                rootContainerStyle={{ padding: 0 }}
+            >
+                {renderDropdownOptions(
+                    statusDropdownData,
+                    selectedStatus,
+                    setSelectedStatus,
+                    selectedStatusOptions,
+                )}
+            </CustomBottomDrawer>
+
+            <CustomBottomDrawer
+                isVisible={isDateRangeDrawerVisible}
+                onBackdropPress={toggleDateRangeDrawer}
+                rootContainerStyle={{ padding: 0 }}
+            >
+                {renderDropdownOptions(
+                    dateRangeDropdownData,
+                    selectedDateRange,
+                    setSelectedDateRange,
+                    selectedDateRangeOptions,
+                )}
+            </CustomBottomDrawer>
+        </SafeAreaView>
+    );
+};
+
+const useStyles = makeStyles((theme) => ({
+    safeArea: { flex: 1, backgroundColor: theme.colors.white },
+    container: {
+        flex: 1,
+        backgroundColor: theme.colors.white,
+    },
+    folioNumber: {
+        flexDirection: "row",
+        backgroundColor: theme.appColors.catskillWhite,
+        paddingHorizontal: 22,
+        paddingVertical: 18,
+    },
+    changeText: {
+        color: theme.appColors.orangeBrown,
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        textDecorationLine: "underline",
+    },
+    selectContainer: {
+        flexDirection: "row",
+        gap: 7,
+        paddingHorizontal: 22,
+        paddingVertical: 10,
+    },
+    transactGradient: {
+        position: "absolute",
+        width: "120%",
+        height: 43,
+    },
+    dropdownPlaceholder: {
+        color: theme.appColors.orangeBrown,
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+    },
+
+    monthContainer: {
+        flexDirection: "column",
+        paddingTop: 13,
+        paddingHorizontal: 22,
+        gap: 15,
+    },
+    notificationContainer: {
+        flexDirection: "row",
+        gap: 10,
+        width: "56%",
+        alignItems: "center",
+    },
+    monthText: {
+        fontSize: theme.fontSize.small,
+        color: theme.appColors.primaryBlue,
+        fontWeight: "700",
+    },
+    iconContent: {
+        width: 50,
+        height: 50,
+        backgroundColor: theme.colors.white,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 50,
+        shadowColor: theme.colors.black,
+        shadowOffset: { width: 1, height: 5 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        elevation: 4,
+    },
+    clockIcon: {
+        position: "absolute",
+        top: 25,
+        right: 23,
+    },
+    columnContent: { flexDirection: "column", gap: 5, width: "110%" },
+    rowContent: { flexDirection: "row", gap: 5, alignItems: "center" },
+    title: {
+        color: theme.appColors.charcoal,
+        fontSize: theme.fontSize.small,
+        fontWeight: "400",
+    },
+    moneyText: {
+        color: theme.appColors.primaryBlue,
+        fontSize: theme.fontSize.small,
+        fontWeight: "700",
+    },
+    timestampText: {
+        color: theme.appColors.lightTextGrey,
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+    },
+    moneyAndIconContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        gap: 7,
+        width: "37%",
+    },
+    textContent: {
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        backgroundColor: theme.colors.white,
+        borderWidth: 1,
+        borderColor: theme.appColors.platinum,
+        borderRadius: 31,
+    },
+    checkboxAndText: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingLeft: 22,
+    },
+    dropdownTitle: {
+        color: theme.appColors.textGrey,
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+    },
+}));
+
+export default TransactionHistory;
