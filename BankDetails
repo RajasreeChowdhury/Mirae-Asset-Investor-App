@@ -1,0 +1,305 @@
+import { makeStyles, Text } from "@rneui/themed";
+import { Formik } from "formik";
+import React, { useState } from "react";
+import { SafeAreaView, ScrollView, View } from "react-native";
+import * as Yup from "yup";
+
+import GearUpImage from "/assets/gear-up-img.svg";
+import SBILogo from "/assets/sbi-logo.svg";
+import useBaseStyles from "/src/baseStyles";
+import useNewFolio from "/src/hooks/useNewFolio";
+import CustomBottomDrawer from "/src/lib/customBottomDrawer";
+import Tab from "/src/lib/Tabs/Tab";
+import type { BankDetailsForm } from "/src/types/newFolio";
+import { bankAccountNumberRegex, ifscRegex } from "/src/utils/regex";
+
+import { FormInputField } from "../../lib/formik";
+import FormSubmitButton from "../../lib/formik/FormSubmitButton";
+import GreenCheckIcon from "../common/GreenCheckIcon";
+
+export default function BankDetailsScreen() {
+    const styles = useStyles();
+    const baseStyles = useBaseStyles();
+    const [index, setIndex] = React.useState(0);
+    const [isBottomSheetVisible, setBottomSheetVisible] = useState(true);
+    const { postBankDetails } = useNewFolio();
+    // function onButtonClick() {
+    //     setBottomSheetVisible(true);
+    // }
+
+    function onBackdropPress() {
+        setBottomSheetVisible(false);
+    }
+    function submitHanlder(values, { setSubmitting }) {
+        postBankDetails(values, () => setSubmitting(false));
+    }
+
+    const validationSchema = Yup.object({
+        accountNumber: Yup.string()
+            .matches(bankAccountNumberRegex, "Enter a valid Account number")
+            .required("Account number is required"),
+        accountType: Yup.string().required("Account type is required"),
+        confirmAccountNumber: Yup.string()
+            .matches(bankAccountNumberRegex, "Enter a valid Account number")
+            .required("Confirm Account number is required")
+            .test("", function (value, { createError, resolve }) {
+                const accountNumber = resolve(Yup.ref("accountNumber"));
+                if (accountNumber !== value) {
+                    return createError({ message: "Account number doesn't match" });
+                }
+                return true;
+            }),
+        ifsc: Yup.string()
+            .matches(ifscRegex, "Enter a valid IFSC Code")
+            .required("IFSC is required"),
+    });
+
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            {/* Bank account Verifiation bottom Drawer*/}
+            <CustomBottomDrawer
+                isVisible={isBottomSheetVisible}
+                onBackdropPress={onBackdropPress}
+            >
+                <View style={styles.centerdImage}>
+                    <GearUpImage />
+                </View>
+
+                <Text style={[styles.title2, baseStyles.textCenter]}>
+                    Verifying Bank Account
+                </Text>
+                <Text
+                    style={[
+                        baseStyles.setColorTextGrey,
+                        baseStyles.fontSmall,
+                        baseStyles.textCenter,
+                        styles.marginBottomSpacing,
+                    ]}
+                >
+                    Please wait while we’re verifying your bank account.
+                </Text>
+            </CustomBottomDrawer>
+            {/* Bank account Verifiation bottom Drawer*/}
+            <Formik<BankDetailsForm>
+                initialValues={{
+                    accountNumber: "",
+                    accountType: "Saving",
+                    confirmAccountNumber: "",
+                    ifsc: "",
+                }}
+                onSubmit={submitHanlder}
+                validateOnBlur
+                validationSchema={validationSchema}
+            >
+                {({ setFieldValue }) => (
+                    <>
+                        <ScrollView style={styles.scrollSpacing}>
+                            <View style={styles.container}>
+                                <Text style={styles.title1}>Bank Details*</Text>
+                                <FormInputField name="ifsc" label="IFSC Code" />
+                                <Text style={[styles.title1, styles.marginTopSpacing]}>
+                                    Account Type*
+                                </Text>
+                                <Tab
+                                    value={index}
+                                    onChange={(e) => {
+                                        setIndex(e);
+                                        if (e === 0) {
+                                            setFieldValue("accountType", "Saving");
+                                        } else {
+                                            setFieldValue("accountType", "Current");
+                                        }
+                                    }}
+                                    indicatorStyle={styles.indicatorStyle}
+                                    style={[styles.tabContainer]}
+                                >
+                                    <Tab.Item
+                                        title="Savings"
+                                        titleStyle={styles.titleStyle}
+                                    />
+                                    <Tab.Item
+                                        title="Current"
+                                        titleStyle={styles.titleStyle}
+                                    />
+                                </Tab>
+                                <FormInputField
+                                    name="accountNumber"
+                                    label="Account Number"
+                                />
+                                <FormInputField
+                                    name="confirmAccountNumber"
+                                    label="Confirm Account Number"
+                                />
+                                <View style={styles.bankSec}>
+                                    <View style={styles.flexContainer}>
+                                        <View
+                                            style={[styles.alignItemsCenter, styles.gap]}
+                                        >
+                                            <View style={styles.bankLogoSec}>
+                                                <SBILogo />
+                                            </View>
+                                            <View>
+                                                <Text style={styles.bankNameText}>
+                                                    State Bank of India
+                                                </Text>
+                                                <Text style={styles.accountNumber}>
+                                                    BANNERGHATTA, BANGLORE
+                                                </Text>
+                                            </View>
+                                        </View>
+                                        <View>
+                                            <GreenCheckIcon />
+                                            <Text
+                                                style={[
+                                                    baseStyles.fontXSmall,
+                                                    styles.textGreen,
+                                                ]}
+                                            >
+                                                Verified
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                        </ScrollView>
+                        <View style={styles.bottomButton}>
+                            <FormSubmitButton
+                                title="Verify"
+                                titleStyle={baseStyles.fw700}
+                            />
+                        </View>
+                    </>
+                )}
+            </Formik>
+        </SafeAreaView>
+    );
+}
+
+const useStyles = makeStyles((theme) => ({
+    safeArea: {
+        flex: 1,
+        backgroundColor: theme.colors.white,
+    },
+    scrollSpacing: {
+        marginBottom: 70,
+    },
+    container: {
+        padding: 20,
+    },
+    marginTopSpacing: {
+        marginTop: 20,
+    },
+    marginBottomSpacing: {
+        marginBottom: 20,
+    },
+    gap: {
+        gap: 12,
+    },
+    centerdImage: {
+        alignSelf: "center",
+        marginBottom: 20,
+    },
+    flexContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    alignItemsCenter: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    title1: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    title2: {
+        fontSize: theme.fontSize.small,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+        paddingBottom: 8,
+    },
+    title3: {
+        fontSize: theme.fontSize.small,
+        color: theme.appColors.primaryBlue,
+    },
+    textGreen: {
+        color: theme.appColors.lightGreen,
+        paddingTop: 4,
+    },
+    bottomButton: {
+        position: "absolute",
+        bottom: 0,
+        right: 0,
+        left: 0,
+        paddingHorizontal: 20,
+        paddingBottom: 30,
+        backgroundColor: theme.colors.white,
+        shadowColor: "black",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
+    },
+    //bank sec
+    bankSec: {
+        backgroundColor: theme.colors.white,
+        shadowColor: "black",
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        borderRadius: 8,
+        padding: 20,
+        marginVertical: 30,
+    },
+    bankLogoSec: {
+        width: 40,
+        height: 40,
+        borderWidth: 1,
+        borderColor: theme.appColors.borderGrey,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 5,
+        marginRight: 6,
+    },
+    bankNameText: {
+        fontSize: theme.fontSize.small,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+        paddingBottom: 6,
+    },
+    accountNumber: {
+        color: theme.appColors.textGrey,
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+    },
+    //tab styles
+    titleStyle: {
+        fontSize: theme.fontSize.small,
+        fontWeight: "500",
+        color: theme.appColors.orangeBrown,
+        height: 30,
+    },
+    tabItem: {
+        width: "100%",
+    },
+    tabContainer: {
+        borderWidth: 0.3,
+        borderColor: theme.appColors.tabBorder,
+        paddingHorizontal: 5,
+        borderRadius: 47,
+        width: "60%",
+        marginVertical: 20,
+    },
+    indicatorStyle: {
+        top: 4,
+        bottom: 0,
+        height: 38,
+        left: 5,
+        right: 4,
+        borderRadius: 47,
+        zIndex: -1,
+        backgroundColor: theme.appColors.lightOrange,
+    },
+}));
