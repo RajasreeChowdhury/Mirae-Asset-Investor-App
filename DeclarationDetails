@@ -1,0 +1,347 @@
+import { Divider, makeStyles, Text } from "@rneui/themed";
+import { Formik } from "formik";
+import { useState } from "react";
+import { SafeAreaView, ScrollView, View } from "react-native";
+import * as Yup from "yup";
+
+import useBaseStyles from "/src/baseStyles";
+import useNewFolio from "/src/hooks/useNewFolio";
+import useOptions from "/src/hooks/useOptions";
+import { FormInputField } from "/src/lib/formik";
+import FormCheckBox from "/src/lib/formik/FormCheckBox";
+import Tab from "/src/lib/Tabs/Tab";
+
+import FormSelect from "../../lib/formik/FormSelect";
+import FormSubmitButton from "../../lib/formik/FormSubmitButton";
+
+export default function DeclarationDetails() {
+    const baseStyles = useBaseStyles();
+    const styles = useStyles();
+    const [indianResidentState, setIndianResidentState] = useState(1);
+    const [pepState, setPepState] = useState(1);
+    const { postFatcaOrDeclarationDetails } = useNewFolio();
+    const { countryOptions, grossAnnualIncomeOptions, occupationDetailsOptions } =
+        useOptions();
+    function onSubmitHandler(values, { setSubmitting }) {
+        console.log("declaration submit", values);
+        postFatcaOrDeclarationDetails(values, () => setSubmitting(false));
+    }
+
+    const declarationValidationSchema = Yup.object({
+        occupation: Yup.string().required("Occupation is required"),
+        grossAnnualIncome: Yup.string().required("Gross Annual Income is required"),
+        countryOfBirth: Yup.string().required("Country of birth is required"),
+        nationality: Yup.string().required("Nationality is required"),
+        pep: Yup.string().required("Pep is required"),
+        otherTaxResident: Yup.string().required(
+            "Tax Resident of any other than India is required",
+        ),
+        foreignResidentTnC: Yup.boolean().required("Declaration is required"),
+        otherTaxResidentCountry: Yup.string().test(
+            "",
+            function (value, { createError, resolve }) {
+                if (resolve(Yup.ref("otherTaxResident")) === "Yes" && !value) {
+                    return createError({ message: "Country is required" });
+                }
+                return true;
+            },
+        ),
+        foreignTaxId: Yup.string().test("", function (value, { createError, resolve }) {
+            if (
+                resolve(Yup.ref("otherTaxResident")) === "Yes" &&
+                resolve(Yup.ref("otherTaxResidentCountry"))
+            ) {
+                if (!value) {
+                    return createError({ message: "Foreign Tax Id is required" });
+                }
+                return true;
+            }
+            return true;
+        }),
+        foreignTaxIdType: Yup.string().test(
+            "",
+            function (value, { createError, resolve }) {
+                if (
+                    resolve(Yup.ref("otherTaxResident")) === "Yes" &&
+                    resolve(Yup.ref("otherTaxResidentCountry"))
+                ) {
+                    if (!value) {
+                        return createError({
+                            message: "Foreign Tax Id type is required",
+                        });
+                    }
+                    return true;
+                }
+                return true;
+            },
+        ),
+    });
+
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            <Formik
+                initialValues={{
+                    occupation: "",
+                    grossAnnualIncome: "",
+                    countryOfBirth: "",
+                    nationality: "",
+                    pep: "no",
+                    otherTaxResident: "no",
+                    foreignResidentTnC: false,
+                    otherTaxResidentCountry: "",
+                    foreignTaxId: "",
+                    foreignTaxIdType: "",
+                }}
+                onSubmit={onSubmitHandler}
+                validateOnBlur
+                validationSchema={declarationValidationSchema}
+            >
+                {({ values, setFieldValue }) => (
+                    <>
+                        <ScrollView style={styles.scrollSpacing}>
+                            <View style={styles.container}>
+                                <Text style={styles.title1}>Applicant Details*</Text>
+
+                                <FormSelect
+                                    name="occupation"
+                                    title=""
+                                    placeholder="Occupation"
+                                    data={occupationDetailsOptions}
+                                    customBgColor="transparent"
+                                />
+                                <FormSelect
+                                    name="grossAnnualIncome"
+                                    title=""
+                                    placeholder="Gross Annual Income"
+                                    data={grossAnnualIncomeOptions}
+                                    customBgColor="transparent"
+                                />
+                                <FormSelect
+                                    name="countryOfBirth"
+                                    title=""
+                                    placeholder="Country of birth*"
+                                    data={countryOptions}
+                                    customBgColor="transparent"
+                                />
+                                <FormSelect
+                                    name="nationality"
+                                    title=""
+                                    placeholder="Country of Citizenship/Nationality*"
+                                    data={countryOptions}
+                                    customBgColor="transparent"
+                                />
+                                <Text
+                                    style={[
+                                        baseStyles.setColorPrimaryBlue,
+                                        baseStyles.fontSmall,
+                                        baseStyles.fw700,
+                                        styles.marginTopSpacing,
+                                    ]}
+                                >
+                                    Politically Exposed Person(PEP) Status*
+                                </Text>
+                                <Tab
+                                    value={pepState}
+                                    onChange={(e) => {
+                                        setPepState(e);
+                                        if (e === 0) {
+                                            setFieldValue("pep", "PEP");
+                                        } else if (e === 1) {
+                                            setFieldValue("pep", "NA");
+                                        } else if (e === 2) {
+                                            setFieldValue("pep", "RPEP");
+                                        }
+                                    }}
+                                    indicatorStyle={styles.indicatorStyle}
+                                    style={[styles.tabContainer, styles.exposedPerson]}
+                                >
+                                    <Tab.Item
+                                        title="Yes"
+                                        titleStyle={styles.titleStyle}
+                                    />
+                                    <Tab.Item title="No" titleStyle={styles.titleStyle} />
+                                    <Tab.Item
+                                        title="Related to PEP"
+                                        titleStyle={styles.titleStyle}
+                                    />
+                                </Tab>
+                                <Text
+                                    style={[
+                                        baseStyles.setColorPrimaryBlue,
+                                        baseStyles.fontSmall,
+                                        baseStyles.fw700,
+                                        styles.marginTopSpacing,
+                                    ]}
+                                >
+                                    Tax Resident of any country other than India*
+                                </Text>
+                                <Tab
+                                    value={indianResidentState}
+                                    onChange={(e) => {
+                                        setIndianResidentState(e);
+                                        if (e === 0) {
+                                            setFieldValue("otherTaxResident", "Yes");
+                                        } else if (e === 1) {
+                                            setFieldValue("otherTaxResident", "No");
+                                        }
+                                    }}
+                                    indicatorStyle={styles.indicatorStyle}
+                                    style={[styles.tabContainer, styles.taxWidth]}
+                                >
+                                    <Tab.Item
+                                        title="Yes"
+                                        titleStyle={styles.titleStyle}
+                                    />
+                                    <Tab.Item title="No" titleStyle={styles.titleStyle} />
+                                </Tab>
+                                {values?.otherTaxResident === "Yes" && (
+                                    <>
+                                        <FormSelect
+                                            name="otherTaxResidentCountry"
+                                            title=""
+                                            placeholder="Country*"
+                                            data={countryOptions}
+                                            customBgColor="transparent"
+                                        />
+                                        {values?.otherTaxResidentCountry && (
+                                            <>
+                                                <FormInputField
+                                                    name="foreignTaxId"
+                                                    label="Foreign Tax ID"
+                                                />
+                                                <FormInputField
+                                                    name="foreignTaxIdType"
+                                                    label="Foreign Tax ID Type"
+                                                />
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                            </View>
+                            <Divider />
+                            <View style={styles.container}>
+                                <Text style={[styles.title3, baseStyles.fw500]}>
+                                    US Persons and Resident of Canada
+                                </Text>
+                                <View style={styles.alignItemsCenter}>
+                                    <FormCheckBox name="foreignResidentTnC" title="" />
+                                    <Text
+                                        style={[
+                                            baseStyles.fontXSmall,
+                                            baseStyles.fw500,
+                                            baseStyles.setColorTextGrey,
+                                        ]}
+                                    >
+                                        I/We hereby declare that I am not a US Person or a
+                                        Resident of Canada.
+                                        <Text style={styles.checkboxOrangeText}>
+                                            Read More
+                                        </Text>
+                                    </Text>
+                                </View>
+                            </View>
+                        </ScrollView>
+                        <View style={styles.bottomButton}>
+                            <FormSubmitButton title="Save & Proceed" />
+                        </View>
+                    </>
+                )}
+            </Formik>
+        </SafeAreaView>
+    );
+}
+
+const useStyles = makeStyles((theme) => ({
+    safeArea: {
+        flex: 1,
+        backgroundColor: theme.colors.white,
+    },
+    scrollSpacing: {
+        marginBottom: 70,
+    },
+    container: {
+        padding: 20,
+    },
+    marginTopSpacing: {
+        marginTop: 24,
+    },
+    flexContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    alignItemsCenter: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    title1: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    title2: {
+        fontSize: theme.fontSize.small,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+        paddingBottom: 8,
+    },
+    title3: {
+        fontSize: theme.fontSize.small,
+        color: theme.appColors.primaryBlue,
+    },
+    checkboxOrangeText: {
+        color: theme.colors.primary,
+        fontWeight: "700",
+        fontSize: theme.fontSize.xSmall,
+        textDecorationLine: "underline",
+    },
+    bottomButton: {
+        position: "absolute",
+        bottom: 0,
+        right: 0,
+        left: 0,
+        paddingHorizontal: 20,
+        paddingBottom: 30,
+        backgroundColor: theme.colors.white,
+        shadowColor: "black",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
+    },
+    //tab styles
+    titleStyle: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.orangeBrown,
+        height: 30,
+        paddingHorizontal: 4,
+    },
+    tabItem: {
+        width: "100%",
+    },
+    taxWidth: {
+        width: "60%",
+    },
+    exposedPerson: {
+        width: "85%",
+    },
+    tabContainer: {
+        borderWidth: 0.3,
+        borderColor: theme.appColors.tabBorder,
+        paddingHorizontal: 6,
+        borderRadius: 47,
+        marginTop: 16,
+    },
+    indicatorStyle: {
+        top: 4,
+        bottom: 0,
+        height: 38,
+        left: 5,
+        right: 4,
+        borderRadius: 47,
+        zIndex: -1,
+        backgroundColor: theme.appColors.lightOrange,
+    },
+}));
