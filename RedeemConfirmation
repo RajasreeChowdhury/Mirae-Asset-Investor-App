@@ -1,0 +1,200 @@
+import { makeStyles, Text } from "@rneui/themed";
+import React from "react";
+import { ImageBackground, SafeAreaView, View } from "react-native";
+
+import Bank from "../../assets/bank.svg";
+import Rupee from "../../assets/rupee.svg";
+
+const ConfirmationScreen: React.FC = () => {
+    const styles = useStyles();
+
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.container}>
+                <View style={styles.bankContainer}>
+                    <Text style={styles.bankAccountText}> Bank Account </Text>
+                    <View style={styles.rowContent}>
+                        <Text style={styles.iciciBankText}> ICICI Bank </Text>
+                        <View style={styles.imageContent}>
+                            <Bank />
+                        </View>
+                    </View>
+                </View>
+
+                <Text style={styles.schemeText}>Scheme Details</Text>
+
+                <View style={styles.cartContainer}>
+                    <ImageBackground
+                        source={require("../../assets/top_container.png")}
+                        style={styles.topContainer}
+                    >
+                        <Text style={styles.valueUnitsText}>22,500</Text>
+                        <View style={styles.unitsContainer}>
+                            <Text style={styles.unitsText}>Units</Text>
+                        </View>
+                    </ImageBackground>
+                    <View style={styles.rupeeContainer}>
+                        <Rupee />
+                    </View>
+                    <View style={styles.middleContainer}>
+                        <View style={styles.fundContainer}>
+                            <Text style={styles.schemeMiddleText}>Scheme</Text>
+                            <Text style={styles.fundText}>
+                                Mirae Asset Emerging Bluechip Fund
+                            </Text>
+                        </View>
+                        <View style={styles.termContainer}>
+                            <Text style={styles.termText}>Equity</Text>
+                            <Text style={styles.termText}>• Direct</Text>
+                            <Text style={styles.termText}>• Growth</Text>
+                        </View>
+                    </View>
+                    <View style={styles.bottomContainer}>
+                        <View style={styles.valueContainer}>
+                            <Text style={styles.bottomText}>Exit Load</Text>
+                            <Text style={styles.commonAmountNumberTextStyle}>
+                                2558.52
+                            </Text>
+                        </View>
+                        <View style={styles.valueContainer}>
+                            <Text style={styles.bottomText}>STT Value</Text>
+                            <Text style={styles.commonAmountNumberTextStyle}>22.93</Text>
+                        </View>
+                        <View style={styles.valueContainer}>
+                            <Text style={styles.bottomText}>Cutoff Tim3</Text>
+                            <Text style={styles.commonAmountNumberTextStyle}>
+                                03.00 pm
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        </SafeAreaView>
+    );
+};
+
+const useStyles = makeStyles((theme) => ({
+    safeArea: {
+        flex: 1,
+        backgroundColor: theme.colors.white,
+    },
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: theme.colors.white,
+    },
+    bankContainer: {
+        padding: 15,
+        gap: 5,
+        flexDirection: "column",
+        justifyContent: "center",
+        borderRadius: 10,
+        backgroundColor: theme.appColors.opaceOrange,
+        marginBottom: 35,
+    },
+    bankAccountText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "800",
+        color: theme.appColors.textGrey,
+    },
+    rowContent: {
+        flexDirection: "row",
+    },
+    iciciBankText: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    imageContent: { marginLeft: "auto", paddingRight: 12, paddingBottom: 5 },
+    schemeText: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    cartContainer: {
+        flexDirection: "column",
+        marginTop: 10,
+        shadowColor: theme.colors.black,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 30,
+        elevation: 4,
+        backgroundColor: theme.colors.white,
+    },
+    topContainer: {
+        flexDirection: "row",
+        padding: 20,
+        gap: 5,
+        borderLeftWidth: 5,
+        borderLeftColor: theme.appColors.graphicBlue,
+        borderTopStartRadius: 10,
+        borderTopEndRadius: 10,
+    },
+    valueUnitsText: {
+        fontSize: theme.fontSize.x3Large,
+        fontWeight: "500",
+        color: theme.appColors.primaryBlue,
+    },
+    unitsContainer: { paddingTop: 12 },
+    unitsText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.primaryBlue,
+    },
+    rupeeContainer: {
+        position: "absolute",
+        marginTop: 40.76,
+        right: 1,
+        transform: [{ rotate: "-18.366deg" }],
+    },
+    middleContainer: {
+        flexDirection: "column",
+        marginBottom: 22,
+    },
+    fundContainer: {
+        marginTop: 15,
+        marginLeft: 17,
+        gap: 3,
+        marginBottom: 6,
+    },
+    schemeMiddleText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "400",
+        color: theme.appColors.textGrey,
+    },
+    fundText: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    termContainer: {
+        flexDirection: "row",
+        marginLeft: 17,
+        gap: 7,
+    },
+    termText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.primaryBlue,
+    },
+    bottomContainer: {
+        flexDirection: "row",
+        height: 55,
+        gap: 45,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+    },
+    valueContainer: { marginLeft: 17, gap: 3 },
+    bottomText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "400",
+        color: theme.appColors.textGrey,
+    },
+    commonAmountNumberTextStyle: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+}));
+
+export default ConfirmationScreen;
