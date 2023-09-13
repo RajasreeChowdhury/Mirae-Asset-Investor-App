@@ -1,0 +1,169 @@
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React, { useState } from "react";
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
+import useBaseStyles from "/src/baseStyles";
+import { formatToIndianCurrency } from "/src/helperFunctions";
+import type { FolioDetail } from "/src/types/portfolio";
+
+import ToggleSwitch from "../common/ToggleSwitch";
+
+const FolioCard = ({ data }: { data: FolioDetail }) => {
+    const baseStyles = useBaseStyles();
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+    return (
+        <TouchableOpacity
+            style={styles.cartContainer}
+            onPress={() =>
+                navigation.navigate("FolioSchemes", { folioNumber: data.Folio })
+            }
+        >
+            <ImageBackground
+                source={require("../../../assets/topContainer.png")}
+                style={styles.topContainerBackground}
+                resizeMode="cover"
+            >
+                <View style={styles.topContainerContent}>
+                    <View style={styles.leftContainer}>
+                        <Text style={styles.topContainerText}>Folio</Text>
+                        <Text style={styles.numberText}>{data?.Folio}</Text>
+                    </View>
+                    <View style={styles.centerContainer}>
+                        <Text style={styles.topContainerText}>Schemes</Text>
+                        <Text style={styles.numberText}>{data?.Scount}</Text>
+                    </View>
+                </View>
+            </ImageBackground>
+
+            <View style={styles.bottomContainer}>
+                <View style={styles.currentValueContainer}>
+                    <Text style={styles.bottomContainerText}>Current Value</Text>
+                    <Text style={styles.amountText}>
+                        {formatToIndianCurrency(data?.MarketValue)}
+                    </Text>
+                </View>
+                <View style={styles.amountInvestedContainer}>
+                    <Text style={styles.bottomContainerText}>Amount Invested</Text>
+                    <Text style={styles.amountText}>
+                        {formatToIndianCurrency(data?.InvestedAmount)}
+                    </Text>
+                </View>
+                <ToggleSwitch
+                    offLabel="Returns"
+                    offValue={`${data?.Absreturns}%`}
+                    onLabel="XIRR"
+                    onValue={`${data?.XIRR}%`}
+                    initialState={false}
+                    gapAboveValue={15}
+                    labelStyle={[
+                        { color: "#48535B" },
+                        baseStyles.fontXSmall,
+                        baseStyles.fw500,
+                    ]}
+                    valueStyle={[baseStyles.fontXSmall, baseStyles.fw700]}
+                    switchSize={20}
+                    onValueStyle={
+                        data.XIRR > 0
+                            ? baseStyles.setColorNeonGreen
+                            : baseStyles.setColorRed
+                    }
+                    offValueStyle={
+                        data.Absreturns > 0
+                            ? baseStyles.setColorNeonGreen
+                            : baseStyles.setColorRed
+                    }
+                />
+            </View>
+        </TouchableOpacity>
+    );
+};
+
+const styles = StyleSheet.create({
+    cartContainer: {
+        width: "100%",
+        height: 139,
+        flexDirection: "column",
+        alignContent: "center",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 15,
+        elevation: 4,
+        backgroundColor: "#fff",
+        borderRadius: 15,
+        paddingBottom: 20,
+    },
+    topContainerBackground: {
+        flexDirection: "row",
+        alignItems: "center",
+        width: "100%",
+        height: 60,
+        borderTopStartRadius: 13,
+        borderTopEndRadius: 10,
+        // overflow: "hidden",
+        borderLeftWidth: 5,
+        borderLeftColor: "#8DC8E8",
+        zIndex: 2,
+    },
+    topContainerContent: {
+        flexDirection: "row",
+        marginHorizontal: 15,
+        gap: 40,
+    },
+    leftContainer: {
+        gap: 5,
+    },
+    centerContainer: {
+        gap: 5,
+    },
+    topContainerText: {
+        fontSize: 10,
+        fontWeight: "400",
+        color: "#000000",
+    },
+    numberText: {
+        fontSize: 14,
+        fontWeight: "700",
+        color: "#043B72",
+    },
+    bottomContainer: {
+        flexDirection: "row",
+        marginHorizontal: 20,
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingVertical: 20,
+        borderBottomEndRadius: 10,
+        borderBottomStartRadius: 10,
+    },
+    currentValueContainer: {
+        gap: 3,
+    },
+    amountInvestedContainer: {
+        gap: 3,
+    },
+    returnsContainer: {
+        gap: 3,
+    },
+    bottomContainerTextRow: {
+        flexDirection: "row",
+        gap: 3,
+    },
+    bottomContainerText: {
+        fontSize: 10,
+        fontWeight: "500",
+        color: "#48535B",
+    },
+    amountText: {
+        fontSize: 11,
+        fontWeight: "700",
+        color: "#043B72",
+    },
+    percentText: {
+        fontSize: 11,
+        fontWeight: "700",
+        color: "#41FC00",
+    },
+});
+export default FolioCard;
