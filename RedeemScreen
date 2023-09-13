@@ -1,0 +1,204 @@
+import { makeStyles, Text } from "@rneui/themed";
+import React from "react";
+import { ImageBackground, SafeAreaView, TouchableOpacity, View } from "react-native";
+
+import Border from "../../assets/border.svg";
+import Icon from "../../assets/frame.svg";
+import Arrow from "../../assets/greenArrow.svg";
+
+const SelectScheme: React.FC = () => {
+    const styles = useStyles();
+
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.container}>
+                <Text style={styles.schemeText}>Select Scheme</Text>
+                <View style={styles.cartContainer}>
+                    <View style={styles.topContainer}>
+                        <View style={styles.borderContent}>
+                            <Border />
+                        </View>
+                        <View style={styles.fundContainer}>
+                            <Text style={styles.fundText}>
+                                Mirae Asset Large Cap Fund
+                            </Text>
+                        </View>
+                        <View style={styles.imgContainer}>
+                            <Icon />
+                        </View>
+                        <View style={styles.termContainer}>
+                            <Text style={styles.termText}>Equity</Text>
+                            <Text style={styles.termText}>• Direct</Text>
+                            <Text style={styles.termText}>• Growth</Text>
+                        </View>
+                    </View>
+                    <View style={styles.middleContainer}>
+                        <View style={styles.navContainer}>
+                            <Text style={styles.middleText}>
+                                NAV as on
+                                <Text style={styles.middleExtraText}> 4 May 2023</Text>
+                            </Text>
+                            <View style={styles.amountArrowContainer}>
+                                <Text style={styles.commonAmountNumberTextStyle}>
+                                    ₹89
+                                </Text>
+                                <Arrow />
+                            </View>
+                        </View>
+                        <View style={styles.cutoffContainer}>
+                            <Text style={styles.middleText}>Cutoff Time</Text>
+                            <Text style={styles.commonAmountNumberTextStyle}>
+                                03.00pm
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={styles.bottomContainer}>
+                        <View style={styles.valueContainer}>
+                            <Text style={styles.bottomText}>Current Value</Text>
+                            <Text style={styles.commonAmountNumberTextStyle}>
+                                ₹22,500
+                            </Text>
+                        </View>
+                        <View style={styles.valueContainer}>
+                            <Text style={styles.bottomText}>Unit Balance</Text>
+                            <Text style={styles.commonAmountNumberTextStyle}>2400.2</Text>
+                        </View>
+                        <View style={styles.valueContainer}>
+                            <Text style={styles.bottomText}>Clear Units</Text>
+                            <Text style={styles.commonAmountNumberTextStyle}>
+                                23952.20
+                            </Text>
+                        </View>
+                    </View>
+                    <ImageBackground
+                        source={require("../../assets/rectangle.png")}
+                        resizeMode="cover"
+                        style={styles.ImageBackground}
+                    >
+                        <TouchableOpacity>
+                            <Text style={styles.redeemNowText}>Redeem Now</Text>
+                        </TouchableOpacity>
+                    </ImageBackground>
+                </View>
+            </View>
+        </SafeAreaView>
+    );
+};
+
+const useStyles = makeStyles((theme) => ({
+    safeArea: {
+        flex: 1,
+        backgroundColor: theme.colors.white,
+    },
+    container: {
+        flex: 1,
+        padding: 22,
+        backgroundColor: theme.colors.white,
+    },
+    schemeText: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    cartContainer: {
+        width: "100%",
+        height: 218,
+        marginTop: 15,
+        flexDirection: "column",
+        shadowColor: theme.colors.black,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 30,
+        elevation: 4,
+        backgroundColor: theme.colors.white,
+    },
+    topContainer: {
+        flexDirection: "column",
+        height: 71,
+        backgroundColor: theme.appColors.lightBlue,
+        borderTopStartRadius: 7,
+        borderTopEndRadius: 7,
+    },
+    borderContent: {
+        position: "absolute",
+    },
+    fundContainer: {
+        marginTop: 12,
+        marginLeft: 19,
+    },
+    fundText: {
+        fontSize: theme.fontSize.small,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    imgContainer: {
+        alignItems: "flex-end",
+        paddingRight: 12,
+    },
+    termContainer: {
+        flexDirection: "row",
+        marginLeft: 19,
+        gap: 5,
+    },
+    termText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.primaryBlue,
+    },
+    middleContainer: {
+        flexDirection: "row",
+        height: 62,
+        paddingTop: 12,
+    },
+    navContainer: {
+        marginLeft: 19,
+        gap: 3,
+    },
+    middleText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.textGrey,
+    },
+    middleExtraText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.colors.black,
+    },
+    amountArrowContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    commonAmountNumberTextStyle: {
+        fontSize: theme.fontSize.small,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    cutoffContainer: {
+        marginLeft: "auto",
+        marginRight: 20,
+        gap: 6,
+    },
+    bottomContainer: {
+        flexDirection: "row",
+        height: 52,
+        gap: 41,
+    },
+    bottomText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.textGrey,
+    },
+    valueContainer: { gap: 5, marginLeft: 19 },
+    ImageBackground: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    redeemNowText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "700",
+        color: theme.colors.white,
+    },
+}));
+
+export default SelectScheme;
