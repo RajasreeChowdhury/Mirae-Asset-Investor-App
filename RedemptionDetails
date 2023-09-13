@@ -1,0 +1,321 @@
+import { makeStyles, Tab, Text } from "@rneui/themed";
+import { Formik } from "formik";
+import React, { useState } from "react";
+import { SafeAreaView, View } from "react-native";
+
+import { FormInputField } from "/src/lib/formik";
+import FormCheckBox from "/src/lib/formik/FormCheckBox";
+import FormSelect from "/src/lib/formik/FormSelect";
+
+import Bank from "../../assets/icici.svg";
+
+const RedeemptionDetails: React.FC = () => {
+    const styles = useStyles();
+    function onPanSubmit(values) {
+        console.log("onPanSubmit", values);
+    }
+    const [index, setIndex] = useState(0);
+    const [firstTabSelected, setFirstTabSelected] = useState(true);
+
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            <Formik
+                initialValues={{
+                    email: "",
+                    password: "",
+                }}
+                onSubmit={onPanSubmit}
+                validateOnBlur
+            >
+                <View style={styles.container}>
+                    <View style={styles.schemeContainer}>
+                        <Text style={styles.schemeText}>Scheme</Text>
+                        <View style={styles.changeContent}>
+                            <Text style={styles.changeSchemeText}>Change Scheme</Text>
+                        </View>
+                    </View>
+                    <View style={styles.cartContainer}>
+                        <View style={styles.topContainer}>
+                            <View style={styles.fundContainer}>
+                                <Text style={styles.fundText}>
+                                    Mirae Asset Large Cap Fund
+                                </Text>
+                            </View>
+                            <View style={styles.termContainer}>
+                                <Text style={styles.termText}>Equity</Text>
+                                <Text style={styles.termText}>• Direct</Text>
+                                <Text style={styles.termText}>• Growth</Text>
+                            </View>
+                        </View>
+                        <View style={styles.bottomContainer}>
+                            <View style={styles.halfBorder}>
+                                <View style={styles.balanceContainer}>
+                                    <Text style={styles.bottomText}>
+                                        Available Balance
+                                    </Text>
+                                    <Text style={styles.bottomNumberTextStyle}>
+                                        ₹ 22,500
+                                    </Text>
+                                    <Text style={styles.bottomNumberStyle}>
+                                        212355 Units
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={styles.exitContainer}>
+                                <Text style={styles.bottomText}>Exit Load Free</Text>
+                                <Text style={styles.bottomNumberTextStyle}>
+                                    ₹ 2,558.2
+                                </Text>
+                                <Text style={styles.bottomNumberStyle}>0.000 Units</Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View style={styles.otherContainer}>
+                        <Text style={styles.selectBankText}>Select Bank</Text>
+                        <View style={styles.dropdownContainer}>
+                            <FormSelect
+                                name="bank"
+                                title=""
+                                placeholder="ICICI Bank"
+                                data={[
+                                    {
+                                        label: "ICICI Bank",
+                                        value: "ICICI Bank",
+                                    },
+                                ]}
+                                customBgColor="transparent"
+                                placeholderStyle={styles.boxText}
+                                renderLeftIcon={() => (
+                                    <View style={styles.bankIconContainer}>
+                                        <Bank />
+                                    </View>
+                                )}
+                            />
+                        </View>
+                        <View style={styles.redemptionContainer}>
+                            <Text style={styles.selectBankText}>Redemption*</Text>
+                            <Tab
+                                value={index}
+                                onChange={(e) => {
+                                    setIndex(e);
+                                    setFirstTabSelected(e === 0);
+                                }}
+                                indicatorStyle={styles.indicatorStyle}
+                                style={styles.tabContainer}
+                            >
+                                <Tab.Item
+                                    title="Amount"
+                                    titleStyle={
+                                        firstTabSelected
+                                            ? styles.selectedTabText
+                                            : styles.unselectedTabText
+                                    }
+                                />
+                                <Tab.Item
+                                    title="Units"
+                                    titleStyle={
+                                        !firstTabSelected
+                                            ? styles.selectedTabText
+                                            : styles.unselectedTabText
+                                    }
+                                />
+                            </Tab>
+                        </View>
+                        <Text style={styles.selectBankText}>Enter Amount</Text>
+                        <FormInputField name="amount" label="₹5000" />
+                        <View style={styles.minimumAmountStyle}>
+                            <Text style={styles.minAmountText}>
+                                Minimum Amount:
+                                <Text style={styles.minText}> ₹ 1000</Text>
+                            </Text>
+                        </View>
+                        <View style={styles.checkboxContainer}>
+                            <View style={styles.customCheckboxContainer}>
+                                <FormCheckBox name="balance" title="Entire Balance" />
+                            </View>
+                            <Text style={styles.acceptText}>Entire Balance</Text>
+                        </View>
+                    </View>
+                </View>
+            </Formik>
+        </SafeAreaView>
+    );
+};
+
+const useStyles = makeStyles((theme) => ({
+    safeArea: {
+        flex: 1,
+        backgroundColor: theme.colors.white,
+    },
+    container: {
+        padding: 22,
+        flex: 1,
+        backgroundColor: theme.colors.white,
+    },
+    schemeContainer: {
+        flexDirection: "row",
+        marginBottom: 15,
+    },
+    changeContent: {
+        marginLeft: "auto",
+        marginTop: 3,
+    },
+    schemeText: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    changeSchemeText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.orangeBrown,
+    },
+    cartContainer: {
+        flexDirection: "column",
+        shadowColor: theme.colors.black,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 30,
+        elevation: 4,
+        backgroundColor: theme.colors.white,
+        marginBottom: 25,
+    },
+    topContainer: {
+        flexDirection: "column",
+        height: 71,
+        backgroundColor: "#8DC8E880",
+        borderTopStartRadius: 7,
+        borderTopEndRadius: 7,
+        gap: 10,
+    },
+    fundContainer: {
+        marginTop: 12,
+        marginLeft: 19,
+    },
+    fundText: {
+        fontSize: theme.fontSize.small,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    termContainer: {
+        flexDirection: "row",
+        marginLeft: 19,
+        gap: 7,
+    },
+    termText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.primaryBlue,
+    },
+    bottomContainer: {
+        flexDirection: "row",
+        height: 79,
+        borderWidth: 0.5,
+        borderColor: theme.appColors.borderGrey,
+        borderBottomEndRadius: 10,
+        borderBottomStartRadius: 10,
+    },
+    bottomText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.textGrey,
+    },
+    bottomNumberTextStyle: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    bottomNumberStyle: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    halfBorder: {
+        borderRightWidth: 0.5,
+        borderColor: theme.appColors.borderGrey,
+    },
+    balanceContainer: {
+        marginRight: 60,
+        marginLeft: 19,
+        paddingTop: 13,
+        gap: 5,
+    },
+    exitContainer: {
+        marginLeft: 15,
+        paddingTop: 13,
+        gap: 5,
+    },
+    otherContainer: { paddingVertical: 0.5 },
+    selectBankText: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    dropdownContainer: {
+        flex: 1,
+        marginBottom: 60,
+    },
+    bankIconContainer: { marginRight: 10 },
+    boxText: {
+        fontSize: theme.fontSize.small,
+        fontWeight: "500",
+        color: theme.appColors.textGrey,
+    },
+    redemptionContainer: { marginTop: 45, gap: 18, marginBottom: 25 },
+    indicatorStyle: {
+        marginVertical: 3,
+        marginHorizontal: 4,
+        height: 44,
+        borderRadius: 47,
+        backgroundColor: theme.appColors.lightOrange,
+    },
+    tabContainer: {
+        flexDirection: "row",
+        borderWidth: 0.2,
+        borderColor: theme.appColors.tabBorder,
+        borderRadius: 47,
+    },
+    selectedTabText: {
+        fontSize: theme.fontSize.small,
+        fontWeight: "500",
+        color: theme.appColors.orangeBrown,
+    },
+    unselectedTabText: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "500",
+        color: theme.appColors.textGrey,
+    },
+    minimumAmountStyle: { marginTop: 10, marginBottom: 25 },
+    minAmountText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.orangeBrown,
+    },
+    minText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "700",
+        color: theme.appColors.orangeBrown,
+    },
+    acceptText: {
+        fontSize: theme.fontSize.xSmall,
+        fontWeight: "500",
+        color: theme.appColors.textGrey,
+    },
+    checkboxContainer: {
+        gap: 6,
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    customCheckboxContainer: {
+        width: 16,
+        height: 16,
+        borderWidth: 1,
+        borderColor: theme.colors.primary,
+        borderRadius: 3,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+}));
+
+export default RedeemptionDetails;
