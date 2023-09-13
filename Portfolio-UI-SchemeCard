@@ -1,0 +1,289 @@
+import { makeStyles } from "@rneui/themed";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { memo } from "react";
+import { Text, View } from "react-native";
+
+import useBaseStyles from "/src/baseStyles";
+import { formatToIndianCurrency } from "/src/helperFunctions";
+import type { SchemeDetail } from "/src/types/portfolio";
+
+import AddCart from "../../../assets/addCart.svg";
+import Icon from "../../../assets/icon.svg";
+import ToggleSwitch from "../common/ToggleSwitch";
+
+const SchemeCard = ({ data }: { data: SchemeDetail }) => {
+    const styles = useStyles();
+    const baseStyles = useBaseStyles();
+
+    return (
+        <View style={styles.cartContainer}>
+            <View style={styles.topContainer}>
+                <View style={styles.borderGradientContainer}>
+                    <LinearGradient
+                        colors={["#00529C", "#0086B8"]}
+                        style={styles.borderGradient}
+                        start={[1, 0]}
+                        end={[0, 1]}
+                    />
+                </View>
+                <View style={styles.fundContainer}>
+                    <Text
+                        style={styles.commonTextStyle}
+                        numberOfLines={2}
+                        ellipsizeMode="tail"
+                    >
+                        {data?.Schdesc}
+                    </Text>
+                </View>
+                <View style={styles.imgContainer}>
+                    <Icon />
+                </View>
+                <View style={styles.termContainer}>
+                    <Text style={styles.termText}>Equity</Text>
+                    <View style={styles.roundSeparator} />
+                    <Text style={styles.termText}>Direct</Text>
+                    <View style={styles.roundSeparator} />
+                    <Text style={styles.termText}>Growth</Text>
+                </View>
+            </View>
+            <View style={styles.middleContainer}>
+                <View style={styles.currentValueContainer}>
+                    <Text style={styles.middleContainerText}>Current Value</Text>
+                    <Text style={styles.commonAmountNumberTextStyle}>
+                        {formatToIndianCurrency(data?.Curamt)}
+                    </Text>
+                </View>
+                <View style={styles.amountInvestedContainer}>
+                    <Text style={styles.middleContainerText}>Amount Invested</Text>
+                    <Text style={styles.commonAmountNumberTextStyle}>
+                        {formatToIndianCurrency(data?.Invamt)}
+                    </Text>
+                </View>
+                <ToggleSwitch
+                    offLabel="Returns"
+                    offValue={`${data?.Absreturns}%`}
+                    onLabel="XIRR"
+                    onValue={`${data?.Xirr}%`}
+                    initialState={false}
+                    gapAboveValue={15}
+                    labelStyle={[
+                        { color: "#48535B" },
+                        baseStyles.fontXSmall,
+                        baseStyles.fw500,
+                    ]}
+                    valueStyle={[baseStyles.fontXSmall, baseStyles.fw700]}
+                    switchSize={20}
+                    onValueStyle={
+                        data.Xirr > 0
+                            ? baseStyles.setColorNeonGreen
+                            : baseStyles.setColorRed
+                    }
+                    offValueStyle={
+                        data.Absreturns > 0
+                            ? baseStyles.setColorNeonGreen
+                            : baseStyles.setColorRed
+                    }
+                />
+            </View>
+            <View style={styles.bottomContainer}>
+                <View style={styles.folioNoContainer}>
+                    <Text style={styles.bottomText}>Folio No</Text>
+                    <Text style={styles.commonAmountNumberTextStyle}>
+                        {data?.FolioNo}
+                    </Text>
+                </View>
+                <View style={styles.goalContainer}>
+                    <Text style={styles.bottomText}>Goal Name</Text>
+                    <Text style={styles.commonAmountNumberTextStyle}>-</Text>
+                </View>
+            </View>
+            <View style={styles.additionalContainer}>
+                <View style={styles.addCartContainer}>
+                    <AddCart />
+                    <Text style={styles.cartText}>Add to Cart</Text>
+                </View>
+
+                <View style={styles.TransactContainer}>
+                    <LinearGradient
+                        colors={["#F58220", "#FAAF72"]}
+                        start={{ x: 1, y: 0 }}
+                        end={{ x: 0, y: 1 }}
+                        style={[styles.TransactContainer, styles.transactGradient]}
+                    />
+                    <Text style={styles.transactText}>Transact</Text>
+                </View>
+            </View>
+        </View>
+    );
+};
+
+const useStyles = makeStyles((theme) => ({
+    cartContainer: {
+        width: "100%",
+        height: 225,
+        flexDirection: "column",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 15,
+        elevation: 4,
+        backgroundColor: "#fff",
+        borderRadius: 15,
+    },
+    commonTextStyle: {
+        fontSize: 12,
+        fontWeight: "700",
+        color: "#043B72",
+        width: "80%",
+    },
+    topContainer: {
+        flexDirection: "column",
+        width: "100%",
+        height: 71,
+        backgroundColor: "#b7dcf0",
+        borderTopStartRadius: 7,
+        borderTopEndRadius: 7,
+    },
+    borderGradientContainer: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        width: 6,
+    },
+    borderGradient: {
+        flex: 1,
+        borderTopLeftRadius: 7,
+        borderBottomLeftRadius: 0,
+    },
+    fundContainer: {
+        height: 15,
+        marginTop: 12,
+        marginLeft: 19,
+    },
+    imgContainer: {
+        flexDirection: "column",
+        alignItems: "flex-end",
+        paddingRight: 12,
+    },
+    termContainer: {
+        height: 12,
+        flexDirection: "row",
+        marginLeft: 19,
+        gap: 5,
+        alignItems: "center",
+    },
+    roundSeparator: {
+        width: 4,
+        height: 4,
+        borderRadius: 2,
+        backgroundColor: theme.colors.secondary,
+    },
+    termText: {
+        fontSize: 10,
+        fontWeight: "500",
+        color: "#043B72",
+    },
+    middleContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        width: "100%",
+        justifyContent: "space-evenly",
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: "#E9E9E9",
+    },
+    currentValueContainer: {
+        gap: 3,
+    },
+    amountInvestedContainer: {
+        gap: 3,
+    },
+    returnsContainer: {
+        gap: 3,
+    },
+    middleContainerTextRow: {
+        flexDirection: "row",
+        gap: 5,
+    },
+    middleContainerText: {
+        fontSize: 10,
+        fontWeight: "500",
+        color: "#48535B",
+    },
+    amountText: {
+        fontSize: 11,
+        fontWeight: "700",
+        color: "#043B72",
+    },
+    percentText: {
+        fontWeight: "700",
+        color: "#41FC00",
+    },
+    bottomContainer: {
+        flexDirection: "row",
+        width: "100%",
+        height: 66,
+        gap: 40,
+        borderBottomWidth: 1,
+        borderBottomColor: "#E9E9E9",
+    },
+    folioNoContainer: {
+        marginLeft: 27,
+        paddingTop: 10,
+        gap: 3,
+    },
+    goalContainer: {
+        paddingTop: 10,
+        gap: 3,
+    },
+    bottomText: {
+        fontSize: 10,
+        fontWeight: "500",
+        color: "#48535B",
+    },
+    commonAmountNumberTextStyle: {
+        fontSize: 11,
+        fontWeight: "700",
+        color: "#043B72",
+    },
+    additionalContainer: {
+        flexDirection: "row",
+        width: "100%",
+        height: 33,
+    },
+    addCartContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "50%",
+        height: 33,
+        backgroundColor: "#F3F3F3",
+        gap: 3,
+        borderBottomLeftRadius: 10,
+    },
+    TransactContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "50%",
+        height: 33,
+        borderBottomRightRadius: 10,
+    },
+    transactGradient: {
+        position: "absolute",
+        width: "100%",
+    },
+    cartText: {
+        fontSize: 10,
+        fontWeight: "700",
+        color: "#043B72",
+    },
+    transactText: {
+        fontSize: 10,
+        fontWeight: "700",
+        color: "#ffffff",
+    },
+}));
+
+export default memo(SchemeCard);
