@@ -1,0 +1,362 @@
+import { makeStyles, Text } from "@rneui/themed";
+import React from "react";
+import { SafeAreaView, View } from "react-native";
+
+import Toggle from "../../assets/ToggleGrid.svg";
+import Mandates from "../../assets/EnachIcon.svg";
+import Invest from "../../assets/InvestIcon.svg";
+import Isip from "../../assets/IsipIcon.svg";
+import Redeem from "../../assets/RedeemIcon.svg";
+import Stp from "../../assets/StpIcon.svg";
+import Switch from "../../assets/SwitchIcon.svg";
+import Swp from "../../assets/SwpIcon.svg";
+
+const TransactGridScreen = () => {
+    const styles = useStyles();
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.container}>
+                <View style={styles.newTransactionContainer}>
+                    <View style={styles.titleGroup}>
+                        <Text style={styles.transactionText}>New Transactions</Text>
+                        <View style={styles.toggleImageContainer}>
+                            <Toggle />
+                        </View>
+                    </View>
+
+                    <View style={styles.borderlineContainer}>
+                        <View style={styles.transactionGroup}>
+                            <View style={styles.transactionItem}>
+                                <Text style={styles.transactionLabelText}>Invest</Text>
+                                <Invest />
+                            </View>
+                            <View style={styles.transactionItem}>
+                                <Text style={styles.transactionLabelText}>Redeem</Text>
+                                <Redeem />
+                            </View>
+                            <View style={styles.transactionItem}>
+                                <Text style={styles.transactionLabelText}>iSIP</Text>
+                                <Isip />
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.titleGroup}>
+                        <Text style={styles.transactionText}>Manage Transactions</Text>
+                    </View>
+                    <View style={styles.borderlineContainer}>
+                        <View style={styles.transactionGroup}>
+                            <View style={styles.transactionItem}>
+                                <Text style={styles.transactionLabelText}>Switch</Text>
+                                <Switch />
+                            </View>
+                            <View style={styles.transactionItem}>
+                                <Text style={styles.transactionLabelText}>STP</Text>
+                                <Stp />
+                            </View>
+                            <View style={styles.transactionItem}>
+                                <Text style={styles.transactionLabelText}>SWP</Text>
+                                <Swp />
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.titleGroup}>
+                        <Text style={styles.transactionText}>Mandates</Text>
+                    </View>
+                    <View style={styles.mandatesGroup}>
+                        <Text style={styles.transactionLabelText}>Enach</Text>
+                        <Mandates />
+                    </View>
+                </View>
+            </View>
+        </SafeAreaView>
+    );
+};
+
+const useStyles = makeStyles((theme) => ({
+    safeArea: { flex: 1, backgroundColor: theme.colors.white },
+    container: {
+        flex: 1,
+        backgroundColor: theme.colors.white,
+    },
+    newTransactionContainer: {},
+    titleGroup: { padding: 20, flexDirection: "row", gap: 168 },
+    transactionText: {
+        fontSize: theme.fontSize.normal,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    transactionGroup: {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        alignItems: "flex-start",
+        marginBottom: 40,
+    },
+    transactionItem: {
+        alignItems: "center",
+        flexDirection: "column",
+        width: 105,
+        height: 152,
+        backgroundColor: theme.appColors.opaceOrange,
+        borderRadius: 12,
+        gap: 15,
+        paddingTop: 15,
+    },
+    transactionLabelText: {
+        fontSize: theme.fontSize.small,
+        fontWeight: "700",
+        color: theme.appColors.primaryBlue,
+    },
+    mandatesGroup: {
+        alignItems: "center",
+        flexDirection: "column",
+        width: 105,
+        height: 152,
+        backgroundColor: theme.appColors.opaceOrange,
+        borderRadius: 12,
+        gap: 15,
+        paddingTop: 15,
+        marginLeft: 20,
+    },
+    mandatesItem: {
+        alignItems: "center",
+    },
+    mandatesIcon: {},
+    mandatesLabelText: {
+        fontSize: theme.fontSize.small,
+        color: theme.appColors.primaryBlue,
+    },
+    toggleImageContainer: {},
+    borderlineContainer: {
+        borderBottomWidth: 1,
+        marginHorizontal: 19,
+        borderColor: "#CDCDCD80",
+    },
+}));
+
+export default TransactGridScreen;
+
+app.ts /* eslint-disable react-native/no-inline-styles */
+import React from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
+
+import ArrowIcon from "../../assets/arrow.png";
+import enachIcon from "../../assets/enach.png";
+import investIcon from "../../assets/invest.png";
+import iSipIcon from "../../assets/isip.png";
+import menuIcon from "../../assets/menu.png";
+import redeemIcon from "../../assets/redeem.png";
+import shoppingCartIcon from "../../assets/shopping_cart.png";
+import stpIcon from "../../assets/stp.png";
+import switchIcon from "../../assets/switch.png";
+import swpIcon from "../../assets/swp.png";
+
+const transactions = [
+    {
+        title: "New Transactions",
+        items: [
+            {
+                title: "Invest",
+                description: "Click here to invest now and start growing!",
+                icon: investIcon,
+            },
+            {
+                title: "Redeem",
+                description: "Unlock your returns - Redeem funds effortlessly.",
+                icon: redeemIcon,
+            },
+            {
+                title: "iSIP",
+                description: "Invest with ease - iSIP for automated contributions.",
+                icon: iSipIcon,
+            },
+        ],
+    },
+    {
+        title: "Manage Transactions",
+        items: [
+            {
+                title: "Switch",
+                description: "Seamlessly transfer investments - Make strategic moves.",
+                icon: switchIcon,
+            },
+            {
+                title: "STP",
+                description: "Step up your investment game - STP for gradual growth.",
+                icon: stpIcon,
+            },
+            {
+                title: "SWP",
+                description: "Secure regular income - SWP for smart withdrawals.",
+                icon: swpIcon,
+            },
+        ],
+    },
+    {
+        title: "Mandates",
+        items: [
+            {
+                title: "Enach",
+                description: "Effortless payments - eNACH for seamless transactions.",
+                icon: enachIcon,
+            },
+        ],
+    },
+];
+
+const TransactScreenList = () => {
+    return (
+        <View style={styles.container}>
+            <View style={styles.topFrame}>
+                <Image
+                    source={require("../../assets/frame.png")}
+                    style={styles.backgroundImage}
+                />
+                <View style={styles.contentContainer}>
+                    <View style={styles.Leftcontainer}>
+                        <Image source={ArrowIcon} style={{ width: 11, height: 22 }} />
+                        <Text style={styles.transactText}>Transact</Text>
+                    </View>
+                    <View style={styles.Rightcontainer}>
+                        <Image
+                            source={shoppingCartIcon}
+                            style={{ width: 24, height: 24 }}
+                        />
+                        <Image source={menuIcon} style={{ width: 26, height: 20 }} />
+                    </View>
+                </View>
+            </View>
+
+            <View style={styles.TransactionContainer}>
+                {transactions.map((transaction) => (
+                    <View>
+                        <Text style={styles.transactionText}>{transaction.title}</Text>
+                        <View style={styles.transactionGridGroup}>
+                            {transaction.items.map((item) => (
+                                <View style={styles.transactionGridItem}>
+                                    <Image source={item.icon} style={styles.iconStyles} />
+                                    <View style={styles.transactionContent}>
+                                        <Text style={styles.transactionLabelText}>
+                                            {item.title}
+                                        </Text>
+                                        {/* <Text style={styles.descriptionText}>
+                                            {item.description}
+                                        </Text> */}
+                                    </View>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                ))}
+            </View>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "white",
+        width: 390,
+        height: 1138,
+    },
+    topFrame: {
+        justifyContent: "center",
+        height: 119,
+    },
+    backgroundImage: {
+        ...StyleSheet.absoluteFillObject,
+        resizeMode: "cover",
+        width: 390,
+        height: 119,
+    },
+    contentContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    Leftcontainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingLeft: 22,
+    },
+    transactText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "500",
+    },
+    Rightcontainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingRight: 21,
+    },
+    TransactionContainer: {
+        paddingHorizontal: 20,
+        paddingTop: 35,
+    },
+    iconStyles: {
+        width: 61,
+        height: 61,
+    },
+    transactionText: {
+        fontSize: 14,
+        fontWeight: "700",
+        color: "#043B72",
+    },
+    transactionGridGroup: {
+        flexDirection: "row",
+        gap: 25,
+        marginVertical: 20,
+    },
+    transactionListGroup: {
+        paddingTop: 20,
+        paddingHorizontal: 5,
+        flexDirection: "column",
+    },
+    transactionGridItem: {
+        flexDirection: "column",
+        gap: 10,
+    },
+    transactionListItem: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingBottom: 35,
+    },
+    transactionContent: {
+        marginLeft: 12,
+    },
+    transactionLabelText: {
+        fontSize: 12,
+        color: "#043B72",
+    },
+    descriptionText: {
+        fontSize: 10,
+        color: "#48535B",
+    },
+    line: {
+        width: 365,
+        marginTop: 13,
+    },
+    mandatesGroup: {
+        paddingTop: 20,
+    },
+    mandatesItem: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    mandatesLabelText: {
+        fontSize: 12,
+        color: "#043B72",
+    },
+    toggleImageContainer: {
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
+    },
+    toggleImage: {
+        width: 38,
+        height: 19,
+    },
+});
+
+export default TransactScreenList;
+
