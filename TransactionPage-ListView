@@ -1,0 +1,162 @@
+Transactlistview.tsx import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+
+import Mandates from "../../assets/EnachIcon.svg";
+import Invest from "../../assets/InvestIcon.svg";
+import Isip from "../../assets/IsipIcon.svg";
+import Redeem from "../../assets/RedeemIcon.svg";
+import Stp from "../../assets/StpIcon.svg";
+import Switch from "../../assets/SwitchIcon.svg";
+import Swp from "../../assets/SwpIcon.svg";
+import Toggle from "../../assets/Togglelist.svg";
+
+const TransactScreenList = () => {
+    return (
+        <View style={styles.container}>
+            <View style={styles.TransactionContainer}>
+                <Text style={styles.transactionText}>New Transactions</Text>
+                <View style={styles.toggleImageContainer}>
+                    <Toggle />
+                </View>
+                <View style={styles.transactionGroup}>
+                    <View style={styles.transactionItem}>
+                        <Invest />
+                        <View style={styles.transactionContent}>
+                            <Text style={styles.transactionLabelText}>Invest</Text>
+                            <Text style={styles.descriptionText}>
+                                Click here to invest now and start growing!
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={styles.transactionItem}>
+                        <Redeem />
+                        <View style={styles.transactionContent}>
+                            <Text style={styles.transactionLabelText}>Redeem</Text>
+                            <Text style={styles.descriptionText}>
+                                Unlock your returns - Redeem funds effortlessly.
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={styles.transactionItem}>
+                        <Isip />
+                        <View style={styles.transactionContent}>
+                            <Text style={styles.transactionLabelText}>iSIP</Text>
+                            <Text style={styles.descriptionText}>
+                                Invest with ease - iSIP for automated contributions.
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+                <Text style={styles.transactionText}>Manage Transactions</Text>
+                <View style={styles.transactionGroup}>
+                    <View style={styles.transactionItem}>
+                        <Switch />
+                        <View style={styles.transactionContent}>
+                            <Text style={styles.transactionLabelText}>Switch</Text>
+                            <Text style={styles.descriptionText}>
+                                Seamlessly transfer investments - Make strategic moves.
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={styles.transactionItem}>
+                        <Stp />
+                        <View style={styles.transactionContent}>
+                            <Text style={styles.transactionLabelText}>STP</Text>
+                            <Text style={styles.descriptionText}>
+                                Step up your investment game - STP for gradual growth.
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={styles.transactionItem}>
+                        <Swp />
+                        <View style={styles.transactionContent}>
+                            <Text style={styles.transactionLabelText}>SWP</Text>
+                            <Text style={styles.descriptionText}>
+                                Secure regular income - SWP for smart withdrawals.
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+
+                <Text style={styles.transactionText}>Mandates</Text>
+                <View style={styles.mandatesGroup}>
+                    <View style={styles.mandatesItem}>
+                        <Mandates />
+                        <View style={styles.transactionContent}>
+                            <Text style={styles.mandatesLabelText}>Enach</Text>
+                            <Text style={styles.descriptionText}>
+                                Effortless payments - eNACH for seamless transactions.
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "white",
+        width: 390,
+        height: 1138,
+        top: 6,
+    },
+    TransactionContainer: {
+        paddingHorizontal: 20,
+        paddingTop: 35,
+    },
+    transactionText: {
+        fontSize: 14,
+        fontWeight: "700",
+        color: "#043B72",
+    },
+    toggleImageContainer: {
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
+    },
+    transactionGroup: {
+        paddingTop: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: "#E9E9E9",
+        marginBottom: 35,
+    },
+    transactionItem: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 5,
+        padding: 5,
+        marginBottom: 18,
+    },
+    transactionContent: {
+        marginLeft: 12,
+    },
+    transactionLabelText: {
+        fontSize: 12,
+        color: "#043B72",
+    },
+    descriptionText: {
+        fontSize: 10,
+        color: "#48535B",
+    },
+    line: {
+        width: 365,
+        marginTop: 13,
+    },
+    mandatesGroup: {
+        paddingTop: 20,
+    },
+    mandatesItem: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    mandatesLabelText: {
+        fontSize: 12,
+        color: "#043B72",
+    },
+});
+
+export default TransactScreenList;
+
